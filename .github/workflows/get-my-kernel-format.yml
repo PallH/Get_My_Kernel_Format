@@ -1,16 +1,16 @@
-name: Process boot.img from URL
+name: Process init_boot.img from URL
 
 on:
   workflow_dispatch: # Allow manual triggering of the workflow
     inputs:
-      boot_img_url:
-        description: "URL to download the boot.img file"
+      init_boot_img_url: "
+        description: "https://filebin.net/z4ek24capy2cfbk1"
         required: true
         type: string
-        #default: "https://filebin.net/gp05fto9lulm3qwg/boot.img"  # Default URL if not provided
+        #default: "https://filebin.net/z4ek24capy2cfbk1"  # Default URL if not provided
 
 jobs:
-  process-boot-img:
+  process-init-boot-img:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,20 +19,20 @@ jobs:
         uses: actions/checkout@v3
 
       # Step 2: Download boot.img from the provided URL
-      - name: Download boot.img
+      - name: Download init_boot.img
         run: |
-          curl -L -o boot.img "${{ github.event.inputs.boot_img_url }}"
-          if [ ! -f "boot.img" ]; then
-            echo "Failed to download boot.img. Exiting."
+          curl -L -o init_boot.img "${{ github.event.inputs.init_boot_img_url }}"
+          if [ ! -f "init_boot.img" ]; then
+            echo "Failed to download init_boot.img. Exiting."
             exit 1
           fi
 
       # Step 3: Ensure magiskboot is executable and process boot.img
-      - name: Process boot.img
+      - name: Process init_boot.img
         continue-on-error: true
         run: |
           # Ensure magiskboot is executable
           chmod +x magiskboot
 
           # Run magiskboot and capture output
-          ./magiskboot unpack boot.img
+          ./magiskboot unpack init_boot.img
